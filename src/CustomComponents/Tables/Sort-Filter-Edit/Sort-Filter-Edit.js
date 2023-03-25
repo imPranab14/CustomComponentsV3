@@ -1,20 +1,34 @@
-
-
 import { useEffect, useState } from "react";
 // import "./FilterableTable.css"
 
+import { getInputBoxFromType } from "../../../services/editTable";
+import AllOneTable from "../Sort-Filter-Edit/SortFilterEditTableStyle.module.css";
+import { FaEdit } from "react-icons/fa";
+import { FaPrescriptionBottleAlt } from "react-icons/fa";
 
-import { getInputBoxFromType } from "../../../services/editTable"
+//Icon
+import { FaPlus } from "react-icons/fa";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { FaUpload } from "react-icons/fa";
+import { FaDownload } from "react-icons/fa";
 
-
-
-const SortFilterEdit = ({ data, columns, filterableCols, sortableCols, tableHeader, recordsPerPageOption, defaultRecordPerPage, uniqueId
+const SortFilterEdit = ({
+  data,
+  columns,
+  filterableCols,
+  sortableCols,
+  tableHeader,
+  recordsPerPageOption,
+  defaultRecordPerPage,
+  uniqueId,
 }) => {
   const [tabData, setTabData] = useState(data);
   const [sortedColumn, setSortedColumn] = useState("");
   const [sortedAsc, setSortedAsc] = useState(0);
   const [valuesToBeFiltered, setValuesToBeFiltered] = useState();
-  const [filterableColumn, setFilterableColumn] = useState(columns.filter(col => col.filterable))
+  const [filterableColumn, setFilterableColumn] = useState(
+    columns.filter((col) => col.filterable)
+  );
   // const [filterStrings, setFilterString] = useState();
 
   const [recordsPerPage, setRecordsPerPage] = useState(defaultRecordPerPage);
@@ -29,19 +43,16 @@ const SortFilterEdit = ({ data, columns, filterableCols, sortableCols, tableHead
   const [selectedOneRowForEdit, setSelectedOneRowForEdit] = useState();
   const [selectedOneRowForDelete, setSelectedOneRowForDelete] = useState();
 
-
-
-
   useEffect(() => {
     let filteredTempObj = {};
     filterableCols.forEach((elemt) => {
       if (elemt.filterable) {
         filteredTempObj[elemt.column] = "";
       }
-    })
+    });
 
-    setValuesToBeFiltered(filteredTempObj)
-  }, [])
+    setValuesToBeFiltered(filteredTempObj);
+  }, []);
 
   // useEffect(() => {
 
@@ -72,32 +83,29 @@ const SortFilterEdit = ({ data, columns, filterableCols, sortableCols, tableHead
   // }, [valuesToBeFiltered, filterableColumn, tabData]);
 
   const changeFilterableInputs = (e) => {
-
     const { name, value } = e.target;
 
+    let tempFilteredStringObject = { ...valuesToBeFiltered, [name]: value };
 
-
-
-    let tempFilteredStringObject = { ...valuesToBeFiltered, [name]: value }
-
-    console.log(tempFilteredStringObject)
+    console.log(tempFilteredStringObject);
     // filterLogic to be implemented here
 
     let filteredData = data.filter((itemRow) => {
-
       let dataPresentInRow = true;
       columns.forEach((cols, index) => {
-
         let columnName = cols.column;
 
         let columnData = itemRow[columnName].toString();
 
-
-        if (cols.filterable && tempFilteredStringObject[columnName] !== "" && !columnData.includes(tempFilteredStringObject[columnName])) {
-          console.log(tempFilteredStringObject[columnName], columnData)
-          dataPresentInRow = false
+        if (
+          cols.filterable &&
+          tempFilteredStringObject[columnName] !== "" &&
+          !columnData.includes(tempFilteredStringObject[columnName])
+        ) {
+          console.log(tempFilteredStringObject[columnName], columnData);
+          dataPresentInRow = false;
         }
-      })
+      });
 
       return dataPresentInRow;
 
@@ -112,7 +120,6 @@ const SortFilterEdit = ({ data, columns, filterableCols, sortableCols, tableHead
 
     console.log(filteredData);
 
-
     let tempDataArray = [];
     for (let index = start; index <= end; index++) {
       tempDataArray.push(filteredData[index]);
@@ -123,12 +130,12 @@ const SortFilterEdit = ({ data, columns, filterableCols, sortableCols, tableHead
     setPageNo(1);
     setDatainPage(tempDataArray);
 
-    console.log(tempDataArray)
+    console.log(tempDataArray);
 
-    setValuesToBeFiltered(tempFilteredStringObject)
+    setValuesToBeFiltered(tempFilteredStringObject);
     // console.log({ ...valuesToBeFiltered, [name]: value })
     // console.log(e.target.name, e.target.value)
-  }
+  };
 
   // const PopUp = ({ filterableColumns }) => {
   //   // console.log("popv b", filterableColumns)
@@ -145,12 +152,9 @@ const SortFilterEdit = ({ data, columns, filterableCols, sortableCols, tableHead
   //       )
   //     }</div>
 
-
   //   </div>
 
   // }
-
-
 
   // const closePopup = () => {
   //   setPopupVisibility(!popupVisibility);
@@ -174,20 +178,20 @@ const SortFilterEdit = ({ data, columns, filterableCols, sortableCols, tableHead
   //     ? data.sort((row1, row2) => (row1[col] > row2[col]) ? 1 : (row1[col] < row2[col]) ? -1 : 0)
   //     : data.sort((row1, row2) => (row1[col] > row2[col]) ? -1 : (row1[col] < row2[col]) ? 1 : 0)
 
-
   //   setTabData([...sortedData]);
   // };
 
-
   const editFormContentChange = (e) => {
-
-    const { name, value } = e.target
-    setSelectedOneRowForEdit({ ...selectedOneRowForEdit, [name]: value })
-  }
-
+    const { name, value } = e.target;
+    setSelectedOneRowForEdit({ ...selectedOneRowForEdit, [name]: value });
+  };
 
   const onUpdateConfirm = () => {
-    let tempUpdatedData = tabData.map(item => (item[uniqueId] === selectedOneRowForEdit[uniqueId] ? selectedOneRowForEdit : item));
+    let tempUpdatedData = tabData.map((item) =>
+      item[uniqueId] === selectedOneRowForEdit[uniqueId]
+        ? selectedOneRowForEdit
+        : item
+    );
 
     let tempDataArray = [];
     for (let index = pageStartIndex; index <= pageEndIndex; index++) {
@@ -195,18 +199,18 @@ const SortFilterEdit = ({ data, columns, filterableCols, sortableCols, tableHead
     }
     setDatainPage(tempDataArray);
 
-    setSelectedOneRowForEdit(null)
-  }
-
+    setSelectedOneRowForEdit(null);
+  };
 
   const onUpdateCancel = () => {
-    setSelectedOneRowForEdit(null)
-  }
+    setSelectedOneRowForEdit(null);
+  };
 
   const onDeleteConfirm = (selectedRow) => {
-
     // console.log(selectedRow, tabData)
-    let tempRowData = tabData.filter((row) => row[uniqueId] !== selectedRow[uniqueId]);
+    let tempRowData = tabData.filter(
+      (row) => row[uniqueId] !== selectedRow[uniqueId]
+    );
     setTabData(tempRowData);
 
     let tempDataArray = [];
@@ -215,31 +219,27 @@ const SortFilterEdit = ({ data, columns, filterableCols, sortableCols, tableHead
     }
     setDatainPage(tempDataArray);
 
-
     // recordSelectionPerPageChange(recordsPerPage)
-    setSelectedOneRowForDelete(null)
-  }
+    setSelectedOneRowForDelete(null);
+  };
 
   const onDeleteCancel = () => {
-    setSelectedOneRowForDelete(null)
-  }
-
+    setSelectedOneRowForDelete(null);
+  };
 
   const editRow = (selectedOneRow) => {
     // EditOneRowPopUp
     // call edit popup form here
-    console.log(selectedOneRow)
-    setSelectedOneRowForEdit(selectedOneRow)
-  }
-
+    console.log(selectedOneRow);
+    setSelectedOneRowForEdit(selectedOneRow);
+  };
 
   const deleteRow = (selectedOneRow) => {
     // Call confirmation popup here
     // DeleteOneRowPopUp
-    setSelectedOneRowForDelete(selectedOneRow)
-    console.log(selectedOneRow)
-  }
-
+    setSelectedOneRowForDelete(selectedOneRow);
+    console.log(selectedOneRow);
+  };
 
   const changePage = (next) => {
     let page = next
@@ -247,8 +247,8 @@ const SortFilterEdit = ({ data, columns, filterableCols, sortableCols, tableHead
         ? pages
         : pageNo + 1
       : pageNo - 1 < 1
-        ? 1
-        : pageNo - 1;
+      ? 1
+      : pageNo - 1;
 
     let start = Math.max((page - 1) * recordsPerPage, 0);
     let end = Math.min(page * recordsPerPage - 1, tabData.length - 1);
@@ -264,9 +264,7 @@ const SortFilterEdit = ({ data, columns, filterableCols, sortableCols, tableHead
     setPageStartIndex(start);
     setPageEndIndex(end);
     setDatainPage(tempDataArray);
-
   };
-
 
   const sortColumn = (col, asc) => {
     if (asc) {
@@ -281,26 +279,24 @@ const SortFilterEdit = ({ data, columns, filterableCols, sortableCols, tableHead
     }
     let sortedData = asc
       ? data.sort((row1, row2) =>
-        row1[col] > row2[col] ? 1 : row1[col] < row2[col] ? -1 : 0
-      )
+          row1[col] > row2[col] ? 1 : row1[col] < row2[col] ? -1 : 0
+        )
       : data.sort((row1, row2) =>
-        row1[col] > row2[col] ? -1 : row1[col] < row2[col] ? 1 : 0
-      );
+          row1[col] > row2[col] ? -1 : row1[col] < row2[col] ? 1 : 0
+        );
 
     setTabData([...sortedData]);
 
-    console.log(sortedData, pageStartIndex, pageEndIndex)
+    console.log(sortedData, pageStartIndex, pageEndIndex);
     let tempDataArray = [];
     for (let index = pageStartIndex; index <= pageEndIndex; index++) {
       tempDataArray.push(sortedData[index]);
     }
 
-
-    console.log(tempDataArray, pageStartIndex, pageEndIndex)
+    console.log(tempDataArray, pageStartIndex, pageEndIndex);
 
     setDatainPage(tempDataArray);
   };
-
 
   const recordSelectionPerPageChange = (noOfRecords) => {
     let start = 0;
@@ -312,85 +308,112 @@ const SortFilterEdit = ({ data, columns, filterableCols, sortableCols, tableHead
     }
 
     setPageStartIndex(start);
-    setPageEndIndex(end)
+    setPageEndIndex(end);
     setRecordsPerPage(noOfRecords);
     // setPages(Math.ceil(data.length / noOfRecords));
     setPageNo(1);
     setDatainPage(tempDataArray);
   };
 
-
-
   return (
-    <div>
+    <div className={AllOneTable.MainBody}>
+      <div className={AllOneTable.frame}>
       <>
-        {selectedOneRowForEdit &&
-
-          <div>
-            Popup Form
-            {
-              columns.map((col, index) => getInputBoxFromType(col, selectedOneRowForEdit, editFormContentChange, index))}
-
-            <button onClick={() => onUpdateConfirm()}>Update</button>
-
-            <button onClick={() => onUpdateCancel()}>Cancel</button>
+        {selectedOneRowForEdit && (
+          <div  className={AllOneTable.modal}  >
+          <div className={AllOneTable.modalcontent}>
+              <h3 className={AllOneTable.PopupHeader}>Popup Form</h3>
+              <div className={AllOneTable.Tdata}>
+            {columns.map((col, index) =>
+              getInputBoxFromType(
+                col,
+                selectedOneRowForEdit,
+                editFormContentChange,
+                index
+              )
+            )}
+               </div>
+             <div className={AllOneTable.PopupFooter}>
+            <button className={AllOneTable.button33} onClick={() => onUpdateConfirm()}>Update</button>
+            <button  className={AllOneTable.button34} onClick={() => onUpdateCancel()}>Cancel</button>
           </div>
-        }
+          </div>
+           </div>
+        )}
+        
       </>
 
       <>
-        {
-          selectedOneRowForDelete &&
-
-          <div>
-            Popup Delete , Are you sure want to delete id : {selectedOneRowForDelete[uniqueId]}
-            <button onClick={() => onDeleteConfirm(selectedOneRowForDelete)}>Delete</button>
-            <button onClick={() => onDeleteCancel(selectedOneRowForDelete)}>Cancel</button>
+        {selectedOneRowForDelete && (
+           <div  className={AllOneTable.modal} >
+          <div className={AllOneTable.modalcontent}>
+            Popup Delete , Are you sure want to delete id :{" "}
+            {selectedOneRowForDelete[uniqueId]}
+            <button onClick={() => onDeleteConfirm(selectedOneRowForDelete)}>
+              Delete
+            </button>
+            <button onClick={() => onDeleteCancel(selectedOneRowForDelete)}>
+              Cancel
+            </button>
           </div>
-        }
+          </div>
+        )}
       </>
 
-
-
-      {tableHeader && <h2 className="tableHeader">{tableHeader}</h2>}
+      {tableHeader && <h2 className={AllOneTable.MainHeader}>{tableHeader}</h2>}
       <table>
         <tr>
           {columns.map((col, index) => (
             <th>
-              {col.sortable ? <button onClick={() => sortColumn(col.column, (sortedColumn === col.column && sortedAsc === 1) ? false : true)}>
-                {col.column}{" "}
-                {
-                  col.column === sortedColumn && <span>
-                    {sortedAsc === -1 && <i>&#8595;</i>}
-                    {sortedAsc === 1 && <i >&#8593;</i>}
-                  </span>
-                }
-              </button>
-                : col.column
-
-
-              }
+              {col.sortable ? (
+                <button
+                className={AllOneTable.TableHeaderText}
+                  onClick={() =>
+                    sortColumn(
+                      col.column,
+                      sortedColumn === col.column && sortedAsc === 1
+                        ? false
+                        : true
+                    )
+                  }
+                >
+                  {col.column}{" "}
+                  {col.column === sortedColumn && (
+                    <span>
+                      {sortedAsc === -1 && <i>&#8595;</i>}
+                      {sortedAsc === 1 && <i>&#8593;</i>}
+                    </span>
+                  )}
+                </button>
+              ) : (
+                col.column
+              )}
             </th>
           ))}
-          <th>Edit</th>
-          <th>Delete</th>
-
+          <th className={AllOneTable.TableHeaderText}>Edit</th>
+          <th className={AllOneTable.TableHeaderText}>Delete</th>
         </tr>
 
         <tr>
-          {columns && valuesToBeFiltered && columns.map((col, index) => (
-            <th>
-              {col.filterable ?
-                <input placeholder={col.column} value={valuesToBeFiltered[col.column]}
-                  name={col.column}
-                  onChange={(e) => changeFilterableInputs(e)}
-                />
-                : <input disabled />
-
-
-              }
-            </th>
-          ))}
+          {columns &&
+            valuesToBeFiltered &&
+            columns.map((col, index) => (
+              <th className={AllOneTable.FilterSection}>
+                {col.filterable ? (
+                  <input
+                  className={AllOneTable.FilterInput}
+                    placeholder={col.column}
+                    value={valuesToBeFiltered[col.column]}
+                    name={col.column}
+                    onChange={(e) => changeFilterableInputs(e)}
+                  />
+                ) : (
+                  <input disabled />
+                )}
+              </th>
+            ))}
+            <th></th>
+            <th></th>
         </tr>
 
         {datainPage &&
@@ -400,33 +423,46 @@ const SortFilterEdit = ({ data, columns, filterableCols, sortableCols, tableHead
                 {columns.map((col) => (
                   <td>{row[col.column]}</td>
                 ))}
-                <td><button onClick={() => editRow(row)}>Edit</button></td>
+                <td>
+                  <button  className={AllOneTable.Editbtn} onClick={() => editRow(row)}> <FaEdit /></button>
+                </td>
 
-                <td><button onClick={() => deleteRow(row)}>Delete</button></td>
-
+                <td>
+                  <button  className={AllOneTable.delbtn} onClick={() => deleteRow(row)}><FaPrescriptionBottleAlt /></button>
+                </td>
               </tr>
             );
           })}
-
       </table>
 
-      <button onClick={() => changePage(true)}>Next</button>
-      <span>PageNo:- {pageNo}</span>
-      <button onClick={() => changePage(false)}>Prev</button>
-
-      <select
-        name="recordsPerPage"
-        onChange={(e) => recordSelectionPerPageChange(e.target.value)}
-        value={recordsPerPage}
-      >
-        {recordsPerPageOption.map((item) => (
-          <option value={item}>{item}</option>
-        ))}
-      </select>
-
+      <div className={AllOneTable.TablePagination}>
+        <button
+          className={AllOneTable.PreNext_btn}
+          onClick={() => changePage(false)}
+        >
+          &lt;
+        </button>
+        <span className={AllOneTable.PageNo}>{pageNo}</span>
+        <button
+          className={AllOneTable.PreNext_btn}
+          onClick={() => changePage(true)}
+        >
+          &#62;
+        </button>
+        <select
+          name="recordsPerPage"
+          className={AllOneTable.PageOption}
+          onChange={(e) => recordSelectionPerPageChange(e.target.value)}
+          value={recordsPerPage}
+        >
+          {recordsPerPageOption.map((item) => (
+            <option value={item}>{item}</option>
+          ))}
+        </select>
+      </div>
+      </div>
     </div>
   );
 };
 
 export default SortFilterEdit;
-

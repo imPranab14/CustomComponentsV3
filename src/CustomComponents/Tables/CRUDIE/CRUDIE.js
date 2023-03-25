@@ -7,6 +7,16 @@ import { read, utils, writeFile } from 'xlsx';
 
 import { getInputBoxFromType } from "../../../services/editTable";
 
+import { FaEdit } from "react-icons/fa";
+import { FaPrescriptionBottleAlt } from "react-icons/fa";
+
+//Icon
+import { FaPlus } from "react-icons/fa";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { FaUpload } from "react-icons/fa";
+import { FaDownload } from "react-icons/fa";
+
+
 const CRUDIE = ({
     data,
     columns,
@@ -357,78 +367,125 @@ const CRUDIE = ({
 
     return <div className={CrudieStyle.MainBody}>
         <div className={CrudieStyle.frame}>
-            <>
-                <button onClick={createNewRecord}>Create New</button>
-                <button onClick={deleteAllSelected}>Delete</button>
-            </>
+        <>
+        {tableHeader && <h2 className={CrudieStyle.MainHeader}>{tableHeader}</h2>}
+          <div className={CrudieStyle.Toolbar}>
+            <div className={CrudieStyle.ToolbarLeft}>
+              <button
+                className={CrudieStyle.CreateNew}
+                onClick={createNewRecord}
+              >
+                <FaPlus size={14} /> New
+              </button>
+              <button
+                className={CrudieStyle.Delete}
+                onClick={deleteAllSelected}
+              >
+                <FaRegTrashAlt size={14} /> Delete
+              </button>
+            </div>
 
-            <>
+            <div className={CrudieStyle.ToolbarRight}>
+              <div className={CrudieStyle.Upload}>
                 <div>
-                    <input id="excelImportBtn" type="file" onChange={onExcelImport} name="excel import" />
-                    <label className="" htmlFor="excelImportBtn">Choose Excel</label>
+                  <input
+                    className={CrudieStyle.InputSectionHide}
+                    id="excelImportBtn"
+                    type="file"
+                    onChange={onExcelImport}
+                    name="excel import"
+                  />
+                  <label className={CrudieStyle.ImportExcelBtn} htmlFor="excelImportBtn">
+                    <FaUpload />
+                    Choose Excel
+                  </label>
                 </div>
-                <div>
-                    <input type="file" id="jsonImportBtn" onChange={onJsonImport} />
-                    <label className="" htmlFor="jsonImportBtn">Choose JSOn</label>
 
-                </div>
                 <div>
-                    <button onClick={onExcelExport} className="btn">
-                        Export Excel<i className="fa fa-download"></i>
-                    </button>
-                    <button onClick={onJsonExport} className="btn">
-                        Export JSON
-                    </button>
+                  <input
+                    className={CrudieStyle.InputSectionHide}
+                    type="file"
+                    id="jsonImportBtn"
+                    onChange={onJsonImport}
+                  />
+                  <label className={CrudieStyle.ImportExcelBtn} htmlFor="jsonImportBtn">
+                    <FaUpload />
+                    Choose JSOn
+                  </label>
                 </div>
-            </>
-
+              </div>
+              <div className={CrudieStyle.Export}>
+                <button onClick={onExcelExport} className={CrudieStyle.ExpotJsonbtn}>
+                  <FaDownload />
+                  Export Excel<i className="fa fa-download"></i>
+                </button>
+                <button onClick={onJsonExport} className={CrudieStyle.ExpotJsonbtn}>
+                  <FaDownload />
+                  Export JSON
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
 
 
             <>
-                {selectedOneRowForEdit && (
-                    <div>
-                        Popup Form
-                        {columns.map((col, index) =>
-                            getInputBoxFromType(
-                                col,
-                                selectedOneRowForEdit,
-                                editFormContentChange,
-                                index
-                            )
-                        )}
-                        {createNewRecordFormOpen ? (
-                            <button onClick={() => onAddNewRecord()}>Create New</button>
-                        ) : (
-                            <button onClick={() => onUpdateConfirm()}>Update</button>
-                        )}
-                        <button onClick={() => onUpdateCancel()}>Cancel</button>
-                    </div>
-                )}
-            </>
+          {selectedOneRowForEdit && (
+            <div className={CrudieStyle.modal}>
+              <div className={CrudieStyle.modalcontent}>
+                <h3 className={CrudieStyle.PopupHeader}>Popup Form</h3>
+                <div className={CrudieStyle.Tdata}>
+                  {columns.map((col, index) =>
+                    getInputBoxFromType(
+                      col,
+                      selectedOneRowForEdit,
+                      editFormContentChange,
+                      index
+                    )
+                  )}
+                </div>
+                <div className={CrudieStyle.PopupFooter}>
+                  {createNewRecordFormOpen ? (
+                    <button onClick={() => onAddNewRecord()}>Create New</button>
+                  ) : (
+                    <button onClick={() => onUpdateConfirm()}>Update</button>
+                  )}
+                  <button onClick={() => onUpdateCancel()}>Cancel</button>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
 
-            <>
-                {selectedOneRowForDelete && (
-                    <div>
-                        Popup Delete , Are you sure want to delete id :{" "}
-                        {selectedOneRowForDelete[uniqueId]}
-                        <button onClick={() => onDeleteConfirm(selectedOneRowForDelete)}>
-                            Delete
-                        </button>
-                        <button onClick={() => onDeleteCancel(selectedOneRowForDelete)}>
-                            Cancel
-                        </button>
-                    </div>
-                )}
-            </>
+           
+        <>
+          {selectedOneRowForDelete && (
+            <div className={CrudieStyle.modal}>
+              <div className={CrudieStyle.modalcontent}>
+                Popup Delete , Are you sure want to delete id :{" "}
+                {selectedOneRowForDelete[uniqueId]}
+                <button
+                  onClick={() => onDeleteConfirm(selectedOneRowForDelete)}
+                >
+                  Delete
+                </button>
+                <button onClick={() => onDeleteCancel(selectedOneRowForDelete)}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+        </>
 
-            {tableHeader && <h2 className="tableHeader">{tableHeader}</h2>}
+
+           
             <table>
 
                 <tr>
-                    <th>Select</th>
+                <th className={CrudieStyle.TableHeaderText}>Select</th>
                     {columns.map((col, index) => (
                         <th>
-                            {col.sortable ? <button onClick={() => sortColumn(col.column, (sortedColumn === col.column && sortedAsc === 1) ? false : true)}>
+                            {col.sortable ? <button className={CrudieStyle.TableHeaderText}  onClick={() => sortColumn(col.column, (sortedColumn === col.column && sortedAsc === 1) ? false : true)}>
                                 {col.column}{" "}
                                 {
                                     col.column === sortedColumn && <span>
@@ -443,66 +500,101 @@ const CRUDIE = ({
                             }
                         </th>
                     ))}
-                    <th>Edit</th>
-                    <th>Delete</th>
+                    <th className={CrudieStyle.TableHeaderText}>Edit</th>
+            <th className={CrudieStyle.TableHeaderText}>Delete</th>
 
                 </tr>
 
-                <tr>
-                    <th></th>
-                    {columns &&
-                        valuesToBeFiltered &&
-                        columns.map((col, index) => (
-
-                            <th>
-                                {col.filterable ? (
-                                    <input
-                                        placeholder={col.column}
-                                        value={valuesToBeFiltered[col.column]}
-                                        name={col.column}
-                                        onChange={(e) => changeFilterableInputs(e)}
-                                    />
-                                ) : (
-                                    <input disabled />
-                                )}
-                            </th>
-                        ))}
-                </tr>
+                <tr className={CrudieStyle.teste}>
+            <th>?</th>
+            {columns &&
+              valuesToBeFiltered &&
+              columns.map((col, index) => (
+                <th className={CrudieStyle.FilterSection}>
+                  {col.filterable ? (
+                    <input
+                      className={CrudieStyle.FilterInput}
+                      placeholder={col.column}
+                      value={valuesToBeFiltered[col.column]}
+                      name={col.column}
+                      onChange={(e) => changeFilterableInputs(e)}
+                    />
+                  ) : (
+                    <input disabled />
+                  )}
+                </th>
+              ))}
+            <th></th>
+            <th></th>
+          </tr>
 
                 {datainPage &&
-                    datainPage.map((row) => {
-                        let tempUniqueId = row[uniqueId]
-                        return (
-                            <tr>
-                                <td><input type="checkbox" id={"checkBox_" + row[uniqueId]} name="selectCheckBox" checked={multiSelectForDeleteList[tempUniqueId] ? true : false} onChange={(e) => onMulitSelectChange(e, row)} /></td>
-                                {columns.map((col) => (
-                                    <td>{row[col.column]}</td>
-                                ))}
-                                <td>
-                                    <button onClick={() => editRow(row)}>Edit</button>
-                                </td>
+            datainPage.map((row) => {
+              let tempUniqueId = row[uniqueId];
+              return (
+                <tr>
+                  <td>
+                    <input
+                      type="checkbox"
+                      id={"checkBox_" + row[uniqueId]}
+                      name="selectCheckBox"
+                      checked={
+                        multiSelectForDeleteList[tempUniqueId] ? true : false
+                      }
+                      onChange={(e) => onMulitSelectChange(e, row)}
+                    />
+                  </td>
+                  {columns.map((col) => (
+                    <td>{row[col.column]}</td>
+                  ))}
+                  <td>
+                    <button
+                      className={CrudieStyle.Editbtn}
+                      onClick={() => editRow(row)}
+                    >
+                      <FaEdit />
+                    </button>
+                  </td>
 
-                                <td>
-                                    <button onClick={() => deleteRow(row)}>Delete</button>
-                                </td>
-                            </tr>
-                        );
-                    })}
-            </table>
+                  <td>
+                    <button
+                      className={CrudieStyle.delbtn}
+                      onClick={() => deleteRow(row)}
+                    >
+                      {" "}
+                      <FaPrescriptionBottleAlt />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+        </table>
 
-            <button onClick={() => changePage(true)}>Next</button>
-            <span>PageNo:- {pageNo}</span>
-            <button onClick={() => changePage(false)}>Prev</button>
-
-            <select
-                name="recordsPerPage"
-                onChange={(e) => recordSelectionPerPageChange(e.target.value)}
-                value={recordsPerPage}
-            >
-                {recordsPerPageOption.map((item) => (
-                    <option value={item}>{item}</option>
-                ))}
-            </select>
+            <div className={CrudieStyle.TablePagination}>
+          <button
+            className={CrudieStyle.PreNext_btn}
+            onClick={() => changePage(false)}
+          >
+            &lt;
+          </button>
+          <span className={CrudieStyle.PageNo}>{pageNo}</span>
+          <button
+            className={CrudieStyle.PreNext_btn}
+            onClick={() => changePage(true)}
+          >
+            &#62;
+          </button>
+          <select
+            name="recordsPerPage"
+            className={CrudieStyle.PageOption}
+            onChange={(e) => recordSelectionPerPageChange(e.target.value)}
+            value={recordsPerPage}
+          >
+            {recordsPerPageOption.map((item) => (
+              <option value={item}>{item}</option>
+            ))}
+          </select>
+        </div>
         </div>
     </div>
         ;

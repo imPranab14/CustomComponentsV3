@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import ExpandedTable from "../ExpanedTable/ExpandableTable.module.css";
 
 const Expanded = ({ data,
     columns,
@@ -130,7 +131,7 @@ const Expanded = ({ data,
         }
     }
 
-    return <div> {tableHeader && <h2 className="tableHeader">{tableHeader}</h2>}
+    return <div div className={ExpandedTable.frame}> {tableHeader && <h2 className={ExpandedTable.MainHeader}>{tableHeader}</h2>}
         <table>
             <tr>
                 {columns.map((col, index) => (
