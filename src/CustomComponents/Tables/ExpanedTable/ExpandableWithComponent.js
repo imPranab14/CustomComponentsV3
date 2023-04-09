@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 
-const Expanded = ({ data,
+const ExpandableWithComponent = ({
+    children,
+    data,
     columns,
     filterableCols,
     sortableCols,
@@ -9,7 +11,8 @@ const Expanded = ({ data,
     defaultRecordPerPage,
     uniqueId,
     upDateDat,
-    innerTableColumns
+    innerTableColumns,
+    InnerComponent
 }) => {
 
     const [recordsPerPage, setRecordsPerPage] = useState(defaultRecordPerPage);
@@ -128,6 +131,8 @@ const Expanded = ({ data,
         else {
             setExpandedTableAtIndex({ ...expandedTableAtIndex, [index]: true })
         }
+
+        console.log({ ...expandedTableAtIndex, [index]: true })
     }
 
     return <div> {tableHeader && <h2 className="tableHeader">{tableHeader}</h2>}
@@ -179,25 +184,12 @@ const Expanded = ({ data,
                                 <td>{row[col.column]}</td>
                             ))}
                         </tr>
-
-
                         {
-                            row.expandableData && expandedTableAtIndex[index] &&
+                            expandedTableAtIndex[index] &&
                             <tr><td>
-                                <table>
-                                    {row.expandableData.map((innerRow, index) =>
-                                        <tr>
-                                            {innerTableColumns && innerTableColumns.map((innerColName, index) =>
-                                                <td>{innerRow[innerColName]}</td>
-                                            )}
-                                        </tr>
-                                    )
-                                    }
-
-                                </table></td></tr>}
-
-
-
+                                <InnerComponent innerData={row.expandableData} />
+                            </td></tr>
+                        }
                     </>
                     );
                 })}
@@ -217,4 +209,4 @@ const Expanded = ({ data,
     </div>
 }
 
-export default Expanded
+export default ExpandableWithComponent;

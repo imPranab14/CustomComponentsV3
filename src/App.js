@@ -12,6 +12,7 @@ import "./App.css";
 
 // // importing data
 import dummyData from "./data/data1";
+import expandableTableDataForComp from "./data/expandableWithComponent";
 import expandableTableData from "./data/expandableData";
 import { useEffect, useState } from "react";
 // import CRUDIE from "./CustomComponents/Tables/CRUDIE/CRUDIE";
@@ -23,7 +24,8 @@ import Popups from "./Pages/Popups";
 import Alerts from "./Pages/Alerts"
 import Popover from "./Pages/Popover";
 import Forms from "./Pages/Form";
-import Tables from "./Pages/Tables"
+import Tables from "./Pages/Tables";
+import Home from "./Pages/Homepage";
 
 import Cards from "./Pages/Cards";
 import { Route, Routes } from "react-router-dom";
@@ -143,10 +145,17 @@ function App() {
           />)}
       </div> */}
       <Routes>
+
+
+        <Route path="/" element={<Home />} />
+
+
         <Route path="/tables" element={dummyData && columns && <Tables dummyData={dummyData} data={data}
           upDateData={upDateData}
           columns={columns}
+          colmns={columns}
           expandableTableData={expandableTableData}
+          expandableTableDataForComp={expandableTableDataForComp}
         />} />
 
         <Route path="/popups" element={<Popups />} />

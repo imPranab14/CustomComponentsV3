@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
-//import ShortTableStyle from "../Sortable/SortTable.module.scss";
-import ShortTableStyle from "../Sortable/Sortable.module.css";
+import { useState } from "react";
+import SortTableStyle from "./Sortable.module.css";
 
 const Sortable = ({
   data,
   columns,
-  sortableCols,
   tableHeader,
   recordsPerPageOption,
   defaultRecordPerPage,
@@ -22,10 +20,6 @@ const Sortable = ({
     data.filter((item, index) => index < recordsPerPage)
   );
 
-  // useEffect(() => {
-  //   setTabData([...data]);
-  //   sortColumn("", true);
-  // }, [recordsPerPage]);
 
   const changePage = (next) => {
     let page = next
@@ -33,23 +27,10 @@ const Sortable = ({
         ? pages
         : pageNo + 1
       : pageNo - 1 < 1
-      ? 1
-      : pageNo - 1;
+        ? 1
+        : pageNo - 1;
 
-    let start = Math.max((page - 1) * recordsPerPage, 0);
-    let end = Math.min(page * recordsPerPage - 1, tabData.length - 1);
-
-    console.log(start, end, pages, page);
-    console.log(tabData.length);
-    let tempDataArray = [];
-    for (let index = start; index <= end; index++) {
-      tempDataArray.push(tabData[index]);
-    }
-
-    setPageNo(page);
-    setPageStartIndex(start);
-    setPageEndIndex(end);
-    setDatainPage(tempDataArray);
+    paginator(null, null, recordsPerPage, page, null)
   };
 
   const sortColumn = (col, asc) => {
@@ -65,47 +46,51 @@ const Sortable = ({
     }
     let sortedData = asc
       ? data.sort((row1, row2) =>
-          row1[col] > row2[col] ? 1 : row1[col] < row2[col] ? -1 : 0
-        )
+        row1[col] > row2[col] ? 1 : row1[col] < row2[col] ? -1 : 0
+      )
       : data.sort((row1, row2) =>
-          row1[col] > row2[col] ? -1 : row1[col] < row2[col] ? 1 : 0
-        );
+        row1[col] > row2[col] ? -1 : row1[col] < row2[col] ? 1 : 0
+      );
 
     setTabData([...sortedData]);
-    let tempDataArray = [];
-    for (let index = pageStartIndex; index <= pageEndIndex; index++) {
-      tempDataArray.push(sortedData[index]);
-    }
-    setDatainPage(tempDataArray);
+
+    paginator(pageStartIndex, pageEndIndex, recordsPerPage, pageNo, sortedData)
   };
+
   const recordSelectionPerPageChange = (noOfRecords) => {
-    let start = 0;
-    let end = Math.min(noOfRecords - 1, tabData.length - 1);
-
-    let tempDataArray = [];
-    for (let index = start; index <= end; index++) {
-      tempDataArray.push(tabData[index]);
-    }
-
-    setRecordsPerPage(noOfRecords);
-    setPages(Math.ceil(data.length / noOfRecords));
-    setPageNo(1);
-    setDatainPage(tempDataArray);
+    paginator(null, null, noOfRecords, null, null)
+    setRecordsPerPage(noOfRecords)
   };
+
+
+  const paginator = (recordStartIndex, recordEndIndex, noOfRecords, currrPageNo, sortedArrayData) => {
+
+    currrPageNo = currrPageNo ? currrPageNo : 1;
+    noOfRecords = noOfRecords ? noOfRecords : defaultRecordPerPage;
+    sortedArrayData = sortedArrayData ? sortedArrayData : tabData;
+    recordStartIndex = recordStartIndex ? recordStartIndex : Math.max((currrPageNo - 1) * noOfRecords, 0);
+    recordEndIndex = recordEndIndex ? recordEndIndex : Math.min(currrPageNo * noOfRecords - 1, sortedArrayData.length - 1);
+
+    let tempDataArray = sortedArrayData.slice(recordStartIndex, recordEndIndex + 1);
+
+    setPages(Math.ceil(sortedArrayData.length / noOfRecords));
+    setPageStartIndex(recordStartIndex);
+    setPageEndIndex(recordEndIndex)
+    setPageNo(currrPageNo);
+    setDatainPage([...tempDataArray]);
+  }
 
   return (
-    <div className={ShortTableStyle.MainBody}>
-      <div className={ShortTableStyle.frame}>
-        {tableHeader && (
-          <h2 className={ShortTableStyle.MainHeader}>{tableHeader}</h2>
-        )}
+    <div className={SortTableStyle.MainBody}>
+      <div className={SortTableStyle.frame}>
+        {tableHeader && <h2 className={SortTableStyle.MainHeader}>{tableHeader}</h2>}
         <table>
           <tr>
             {columns.map((col, index) => (
               <th>
                 {col.sortable ? (
                   <button
-                    className={ShortTableStyle.TableHeaderText}
+                    className={SortTableStyle.TableHeaderText}
                     onClick={() =>
                       sortColumn(
                         col.column,
@@ -133,7 +118,7 @@ const Sortable = ({
           {datainPage &&
             datainPage.map((row) => {
               return (
-                <tr className={ShortTableStyle.test}>
+                <tr className={SortTableStyle.test}>
                   {" "}
                   {columns.map((col) => (
                     <td>{row[col.column]}</td>
@@ -143,23 +128,18 @@ const Sortable = ({
             })}
         </table>
 
-        <div className={ShortTableStyle.TablePagination}>
-          <button
-            className={ShortTableStyle.PreNext_btn}
-            onClick={() => changePage(false)}
-          >
-            &lt;
-          </button>
-          <span className={ShortTableStyle.PageNo}>{pageNo}</span>
-          <button
-            className={ShortTableStyle.PreNext_btn}
-            onClick={() => changePage(true)}
-          >
-            &#62;
-          </button>
+        <div className={SortTableStyle.TablePagination}>
+
+          <button onClick={() => changePage(true)}
+            className={SortTableStyle.PreNext_btn}
+          >Next</button>
+          <span className={SortTableStyle.PageNo}>{pageNo}</span>
+          <button className={SortTableStyle.PreNext_btn}
+            onClick={() => changePage(false)}>Prev</button>
+
           <select
             name="recordsPerPage"
-            className={ShortTableStyle.PageOption}
+            className={SortTableStyle.PageOption}
             onChange={(e) => recordSelectionPerPageChange(e.target.value)}
             value={recordsPerPage}
           >

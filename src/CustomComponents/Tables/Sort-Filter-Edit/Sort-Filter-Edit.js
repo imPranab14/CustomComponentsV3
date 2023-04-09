@@ -1,7 +1,10 @@
+
+
 import { useEffect, useState } from "react";
 // import "./FilterableTable.css"
 
-import { getInputBoxFromType } from "../../../services/editTable";
+
+import { getInputBoxFromType } from "../../../services/editTable"
 import AllOneTable from "../Sort-Filter-Edit/SortFilterEditTableStyle.module.css";
 import { FaEdit } from "react-icons/fa";
 import { FaPrescriptionBottleAlt } from "react-icons/fa";
@@ -12,23 +15,14 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { FaUpload } from "react-icons/fa";
 import { FaDownload } from "react-icons/fa";
 
-const SortFilterEdit = ({
-  data,
-  columns,
-  filterableCols,
-  sortableCols,
-  tableHeader,
-  recordsPerPageOption,
-  defaultRecordPerPage,
-  uniqueId,
+
+const SortFilterEdit = ({ data, columns, filterableCols, sortableCols, tableHeader, recordsPerPageOption, defaultRecordPerPage, uniqueId
 }) => {
   const [tabData, setTabData] = useState(data);
   const [sortedColumn, setSortedColumn] = useState("");
   const [sortedAsc, setSortedAsc] = useState(0);
   const [valuesToBeFiltered, setValuesToBeFiltered] = useState();
-  const [filterableColumn, setFilterableColumn] = useState(
-    columns.filter((col) => col.filterable)
-  );
+  const [filterableColumn, setFilterableColumn] = useState(columns.filter(col => col.filterable))
   // const [filterStrings, setFilterString] = useState();
 
   const [recordsPerPage, setRecordsPerPage] = useState(defaultRecordPerPage);
@@ -43,16 +37,19 @@ const SortFilterEdit = ({
   const [selectedOneRowForEdit, setSelectedOneRowForEdit] = useState();
   const [selectedOneRowForDelete, setSelectedOneRowForDelete] = useState();
 
+
+
+
   useEffect(() => {
     let filteredTempObj = {};
     filterableCols.forEach((elemt) => {
       if (elemt.filterable) {
         filteredTempObj[elemt.column] = "";
       }
-    });
+    })
 
-    setValuesToBeFiltered(filteredTempObj);
-  }, []);
+    setValuesToBeFiltered(filteredTempObj)
+  }, [])
 
   // useEffect(() => {
 
@@ -83,29 +80,32 @@ const SortFilterEdit = ({
   // }, [valuesToBeFiltered, filterableColumn, tabData]);
 
   const changeFilterableInputs = (e) => {
+
     const { name, value } = e.target;
 
-    let tempFilteredStringObject = { ...valuesToBeFiltered, [name]: value };
 
-    console.log(tempFilteredStringObject);
+
+
+    let tempFilteredStringObject = { ...valuesToBeFiltered, [name]: value }
+
+    console.log(tempFilteredStringObject)
     // filterLogic to be implemented here
 
     let filteredData = data.filter((itemRow) => {
+
       let dataPresentInRow = true;
       columns.forEach((cols, index) => {
+
         let columnName = cols.column;
 
         let columnData = itemRow[columnName].toString();
 
-        if (
-          cols.filterable &&
-          tempFilteredStringObject[columnName] !== "" &&
-          !columnData.includes(tempFilteredStringObject[columnName])
-        ) {
-          console.log(tempFilteredStringObject[columnName], columnData);
-          dataPresentInRow = false;
+
+        if (cols.filterable && tempFilteredStringObject[columnName] !== "" && !columnData.includes(tempFilteredStringObject[columnName])) {
+          console.log(tempFilteredStringObject[columnName], columnData)
+          dataPresentInRow = false
         }
-      });
+      })
 
       return dataPresentInRow;
 
@@ -120,6 +120,7 @@ const SortFilterEdit = ({
 
     console.log(filteredData);
 
+
     let tempDataArray = [];
     for (let index = start; index <= end; index++) {
       tempDataArray.push(filteredData[index]);
@@ -130,12 +131,12 @@ const SortFilterEdit = ({
     setPageNo(1);
     setDatainPage(tempDataArray);
 
-    console.log(tempDataArray);
+    console.log(tempDataArray)
 
-    setValuesToBeFiltered(tempFilteredStringObject);
+    setValuesToBeFiltered(tempFilteredStringObject)
     // console.log({ ...valuesToBeFiltered, [name]: value })
     // console.log(e.target.name, e.target.value)
-  };
+  }
 
   // const PopUp = ({ filterableColumns }) => {
   //   // console.log("popv b", filterableColumns)
@@ -152,9 +153,12 @@ const SortFilterEdit = ({
   //       )
   //     }</div>
 
+
   //   </div>
 
   // }
+
+
 
   // const closePopup = () => {
   //   setPopupVisibility(!popupVisibility);
@@ -178,20 +182,20 @@ const SortFilterEdit = ({
   //     ? data.sort((row1, row2) => (row1[col] > row2[col]) ? 1 : (row1[col] < row2[col]) ? -1 : 0)
   //     : data.sort((row1, row2) => (row1[col] > row2[col]) ? -1 : (row1[col] < row2[col]) ? 1 : 0)
 
+
   //   setTabData([...sortedData]);
   // };
 
+
   const editFormContentChange = (e) => {
-    const { name, value } = e.target;
-    setSelectedOneRowForEdit({ ...selectedOneRowForEdit, [name]: value });
-  };
+
+    const { name, value } = e.target
+    setSelectedOneRowForEdit({ ...selectedOneRowForEdit, [name]: value })
+  }
+
 
   const onUpdateConfirm = () => {
-    let tempUpdatedData = tabData.map((item) =>
-      item[uniqueId] === selectedOneRowForEdit[uniqueId]
-        ? selectedOneRowForEdit
-        : item
-    );
+    let tempUpdatedData = tabData.map(item => (item[uniqueId] === selectedOneRowForEdit[uniqueId] ? selectedOneRowForEdit : item));
 
     let tempDataArray = [];
     for (let index = pageStartIndex; index <= pageEndIndex; index++) {
@@ -199,18 +203,18 @@ const SortFilterEdit = ({
     }
     setDatainPage(tempDataArray);
 
-    setSelectedOneRowForEdit(null);
-  };
+    setSelectedOneRowForEdit(null)
+  }
+
 
   const onUpdateCancel = () => {
-    setSelectedOneRowForEdit(null);
-  };
+    setSelectedOneRowForEdit(null)
+  }
 
   const onDeleteConfirm = (selectedRow) => {
+
     // console.log(selectedRow, tabData)
-    let tempRowData = tabData.filter(
-      (row) => row[uniqueId] !== selectedRow[uniqueId]
-    );
+    let tempRowData = tabData.filter((row) => row[uniqueId] !== selectedRow[uniqueId]);
     setTabData(tempRowData);
 
     let tempDataArray = [];
@@ -219,27 +223,31 @@ const SortFilterEdit = ({
     }
     setDatainPage(tempDataArray);
 
+
     // recordSelectionPerPageChange(recordsPerPage)
-    setSelectedOneRowForDelete(null);
-  };
+    setSelectedOneRowForDelete(null)
+  }
 
   const onDeleteCancel = () => {
-    setSelectedOneRowForDelete(null);
-  };
+    setSelectedOneRowForDelete(null)
+  }
+
 
   const editRow = (selectedOneRow) => {
     // EditOneRowPopUp
     // call edit popup form here
-    console.log(selectedOneRow);
-    setSelectedOneRowForEdit(selectedOneRow);
-  };
+    console.log(selectedOneRow)
+    setSelectedOneRowForEdit(selectedOneRow)
+  }
+
 
   const deleteRow = (selectedOneRow) => {
     // Call confirmation popup here
     // DeleteOneRowPopUp
-    setSelectedOneRowForDelete(selectedOneRow);
-    console.log(selectedOneRow);
-  };
+    setSelectedOneRowForDelete(selectedOneRow)
+    console.log(selectedOneRow)
+  }
+
 
   const changePage = (next) => {
     let page = next
@@ -247,8 +255,8 @@ const SortFilterEdit = ({
         ? pages
         : pageNo + 1
       : pageNo - 1 < 1
-      ? 1
-      : pageNo - 1;
+        ? 1
+        : pageNo - 1;
 
     let start = Math.max((page - 1) * recordsPerPage, 0);
     let end = Math.min(page * recordsPerPage - 1, tabData.length - 1);
@@ -264,7 +272,9 @@ const SortFilterEdit = ({
     setPageStartIndex(start);
     setPageEndIndex(end);
     setDatainPage(tempDataArray);
+
   };
+
 
   const sortColumn = (col, asc) => {
     if (asc) {
@@ -279,24 +289,26 @@ const SortFilterEdit = ({
     }
     let sortedData = asc
       ? data.sort((row1, row2) =>
-          row1[col] > row2[col] ? 1 : row1[col] < row2[col] ? -1 : 0
-        )
+        row1[col] > row2[col] ? 1 : row1[col] < row2[col] ? -1 : 0
+      )
       : data.sort((row1, row2) =>
-          row1[col] > row2[col] ? -1 : row1[col] < row2[col] ? 1 : 0
-        );
+        row1[col] > row2[col] ? -1 : row1[col] < row2[col] ? 1 : 0
+      );
 
     setTabData([...sortedData]);
 
-    console.log(sortedData, pageStartIndex, pageEndIndex);
+    console.log(sortedData, pageStartIndex, pageEndIndex)
     let tempDataArray = [];
     for (let index = pageStartIndex; index <= pageEndIndex; index++) {
       tempDataArray.push(sortedData[index]);
     }
 
-    console.log(tempDataArray, pageStartIndex, pageEndIndex);
+
+    console.log(tempDataArray, pageStartIndex, pageEndIndex)
 
     setDatainPage(tempDataArray);
   };
+
 
   const recordSelectionPerPageChange = (noOfRecords) => {
     let start = 0;
@@ -308,15 +320,17 @@ const SortFilterEdit = ({
     }
 
     setPageStartIndex(start);
-    setPageEndIndex(end);
+    setPageEndIndex(end)
     setRecordsPerPage(noOfRecords);
     // setPages(Math.ceil(data.length / noOfRecords));
     setPageNo(1);
     setDatainPage(tempDataArray);
   };
 
+
+
   return (
-    <div className={AllOneTable.MainBody}>
+     <div className={AllOneTable.MainBody}>
       <div className={AllOneTable.frame}>
       <>
         {selectedOneRowForEdit && (
@@ -466,3 +480,4 @@ const SortFilterEdit = ({
 };
 
 export default SortFilterEdit;
+
