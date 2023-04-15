@@ -96,8 +96,6 @@ button {
   width: 20%;
   padding: 1rem;
   border-radius: 8px;
-  height: 60%;
-  overflow: auto;
 }
 
 
@@ -187,20 +185,20 @@ input {
     font-size: 1rem;
     border-radius: 4px;
     transition: background-color .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s;
-    -webkit-appearance: none;
-    appearance: none;
+   
+    
 }
 select  {
   color: #495057;
   background: #fff;
-  padding: 0.3rem 0.3rem;
+  
   border: 1px solid #ced4da;
   outline: 0 none;
   font-size: 1rem;
   border-radius: 4px;
   transition: background-color .2s,color .2s,border-color .2s,box-shadow .2s,opacity .2s;
-  -webkit-appearance: none;
-  appearance: none;
+
+ 
 }
 .DeleteBtnAlign{
   display: flex;
