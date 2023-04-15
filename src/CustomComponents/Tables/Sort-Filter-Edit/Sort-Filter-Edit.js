@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getInputBoxFromType } from "../../../services/editTable";
 import AllOneTable from "../Sort-Filter-Edit/SortFilterEditTableStyle.module.css";
 
-import { FaEdit } from "react-icons/fa";
+import { FaPen } from "react-icons/fa";
 import { FaPrescriptionBottleAlt } from "react-icons/fa";
 
 //Icon
@@ -359,14 +359,16 @@ const SortFilterEdit = ({
               <div className={AllOneTable.modalcontent}>
                 Popup Delete , Are you sure want to delete id :{" "}
                 {selectedOneRowForDelete[uniqueId]}
+                <div className={AllOneTable.DeleteBtnAlign}>
                 <button
-                  onClick={() => onDeleteConfirm(selectedOneRowForDelete)}
+                  className={AllOneTable.PopupDelBtn} onClick={() => onDeleteConfirm(selectedOneRowForDelete)}
                 >
                   Delete
                 </button>
-                <button onClick={() => onDeleteCancel(selectedOneRowForDelete)}>
+                <button className={AllOneTable.PopupCancelBtn} onClick={() => onDeleteCancel(selectedOneRowForDelete)}>
                   Cancel
                 </button>
+                </div>
               </div>
             </div>
           )}
@@ -439,11 +441,11 @@ const SortFilterEdit = ({
                   ))}
                   <td>
                     <button
-                      className={AllOneTable.Editbtn}
+                      className={AllOneTable.EditBtn}
                       onClick={() => editRow(row)}
                     >
                       {" "}
-                      <FaEdit />
+                      <div className={AllOneTable.EditBtn}>< FaPen /></div> 
                     </button>
                   </td>
 
@@ -452,7 +454,7 @@ const SortFilterEdit = ({
                       className={AllOneTable.delbtn}
                       onClick={() => deleteRow(row)}
                     >
-                      <FaPrescriptionBottleAlt />
+                     <div className={AllOneTable.DelBtn}><FaPrescriptionBottleAlt /></div>
                     </button>
                   </td>
                 </tr>

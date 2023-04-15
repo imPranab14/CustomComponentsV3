@@ -213,6 +213,47 @@ select  {
 .DelBtn{
   color: rgb(235, 53, 53)
 }
+.PopupDelBtn{
+  background-color: #f5c9ac;
+  border-radius: 1rem;
+  color: rgb(37, 19, 19);
+  cursor: pointer;
+  display: inline-block;
+  font-family: CerebriSans-Regular, -apple-system, system-ui, Roboto, sans-serif;
+  padding: 5px 15px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 250ms;
+  border: 0;
+  font-size: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  margin-right: 5px;
+  font-weight: 600;
+
+}
+.PopupCancelBtn{
+  background-color: #b6d1f8;
+  border-radius: 1rem;
+  color: rgb(6, 19, 94);
+  cursor: pointer;
+  display: inline-block;
+  font-family: CerebriSans-Regular, -apple-system, system-ui, Roboto, sans-serif;
+  padding: 5px 15px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 250ms;
+  border: 0;
+  font-size: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  margin-right: 5px;
+  font-weight: 600;
+}
+
+
 
 /* --------------- Scroll Bar CSS --------------- */
 

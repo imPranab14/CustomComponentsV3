@@ -285,11 +285,12 @@ const Editable = ({
                 {selectedOneRowForDelete[uniqueId]}
                 <div className={EditabrlStyle.DeleteBtnAlign}>
                 <button
+                  className={EditabrlStyle.PopupDelBtn}
                   onClick={() => onDeleteConfirm(selectedOneRowForDelete)}
                 >
                   Delete
                 </button>
-                <button onClick={() => onDeleteCancel(selectedOneRowForDelete)}>
+                <button className={EditabrlStyle.PopupCancelBtn} onClick={() => onDeleteCancel(selectedOneRowForDelete)}>
                   Cancel
                 </button>
                 </div>
